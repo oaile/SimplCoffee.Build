@@ -20,11 +20,11 @@ namespace SimplCoffee.API.Controllers
 
         // GET api/values
         [HttpGet]
-        public IEnumerable<string> Get()
+        public JsonResult Get()
         {
             var postModel = _postService.GetPosts();
 
-            return new string[] { "value1", "value2" };
+            return Json(postModel.ToList());
         }
 
         // GET api/values/5

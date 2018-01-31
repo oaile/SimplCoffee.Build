@@ -1,4 +1,5 @@
 ﻿using ApplicationCore.Entities;
+using Infrastructure.Mapping;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -10,18 +11,11 @@ namespace Infrastructure.Data
         {
         }
 
-        public DbSet<Post> Posts { get; set; }
-
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            builder.Entity<Post>(ConfigurePost);
+            base.OnModelCreating(builder);
+            new PostMapping(builder.Entity<Post>());
             
-        }
-
-        private void ConfigurePost(EntityTypeBuilder<Post> builder)
-        {
-            builder.ToTable("Post");
-            builder.HasKey(p => p.Id);
         }
     }
 }

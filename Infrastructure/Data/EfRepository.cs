@@ -11,15 +11,17 @@ namespace Infrastructure.Data
     public class EfRepository<T> : IRepository<T> where T : BaseEntity
     {
         protected readonly CoffeeDbContext _coffeeDbContext;
+        private DbSet<T> _entities;
 
         public EfRepository(CoffeeDbContext coffeeDbContext)
         {
             _coffeeDbContext = coffeeDbContext;
+            _entities = _coffeeDbContext.Set<T>();
         }
 
         public T Add(T entity)
         {
-            _coffeeDbContext.Set<T>().Add(entity);
+            _entities.Add(entity);
             _coffeeDbContext.SaveChanges();
 
             return entity;
@@ -27,18 +29,18 @@ namespace Infrastructure.Data
 
         public void Delete(T entity)
         {
-            _coffeeDbContext.Set<T>().Remove(entity);
+            _entities.Remove(entity);
             _coffeeDbContext.SaveChanges();
         }
 
-        public T GetById(int id)
+        public T GetById(Guid id)
         {
-            return _coffeeDbContext.Set<T>().Find(id);
+            return _entities.SingleOrDefault(p=>p.Id == id);
         }
 
         public IEnumerable<T> ListAll()
         {
-            return _coffeeDbContext.Set<T>().AsEnumerable();
+            return _entities.AsEnumerable();
         }
 
         public void Update(T entity)
